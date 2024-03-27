@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: Licensing Service
+management:
+  endpoints:
+    web:
+      base-path: /
+  endpoint:
+    health:
+      show-details: always
+  health:
+    diskspace:
+      enabled: true
