@@ -16,7 +16,14 @@ CMD ["./mvnw", "spring-boot:run", "-Dspring-boot.run.jvmArguments='-agentlib:jdw
 FROM base AS build
 RUN ["./mvnw", "package"]
 
-FROM eclipse-temurin:17-jre-jammy AS production
-EXPOSE 8080
+FROM eclipse-temurin:17-jdk-jammy AS artifacts
 COPY --from=build /app/target/licensing-service-*.jar /licensing-service.jar
-CMD ["java", "-jar", "/licensing-service.jar"]
+RUN mkdir -p target && (cd target; jar -xf /licensing-service.jar)
+
+FROM eclipse-temurin:17-jre-jammy AS production
+ARG TARGET=target
+COPY --from=artifacts ${TARGET}/BOOT-INF/lib /app/lib
+COPY --from=artifacts ${TARGET}/META-INF /app/META-INF
+COPY --from=artifacts ${TARGET}/BOOT-INF/classes /app
+EXPOSE 8080
+CMD ["java", "-cp", "app:app/lib/*", "com.optimagrowth.license.LicensingServiceApplication"]
