@@ -3,7 +3,7 @@ services:
   licensing-service:
     build:
       context: .
-      target: ${TARGET}
+      target: run
     ports:
       - "8000:8000"
       - "8080:8080"

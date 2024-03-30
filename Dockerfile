@@ -7,12 +7,6 @@ COPY mvnw pom.xml ./
 RUN ./mvnw dependency:resolve
 COPY src ./src
 
-FROM base AS test
-RUN ./mvnw test
-
-FROM base AS debug
-CMD ["./mvnw", "spring-boot:run", "-Dspring-boot.run.jvmArguments='-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8000'"]
-
 FROM base AS package
 RUN ./mvnw package
 
@@ -29,4 +23,4 @@ COPY --from=build ${OUTPUT_DIR}/dependencies/ ./
 COPY --from=build ${OUTPUT_DIR}/spring-boot-loader/ ./
 COPY --from=build ${OUTPUT_DIR}/snapshot-dependencies/ ./
 COPY --from=build ${OUTPUT_DIR}/application/ ./
-CMD ["java", "org.springframework.boot.loader.launch.JarLauncher"]
+ENTRYPOINT java org.springframework.boot.loader.launch.JarLauncher
