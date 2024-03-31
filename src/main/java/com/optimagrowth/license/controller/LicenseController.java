@@ -33,7 +33,7 @@ class LicenseController {
     ResponseEntity<License> getLicense(@PathVariable("organizationId") String organizationId,
             @PathVariable("licenseId") String licenseId,
             @RequestHeader(value = "Accept-Language", required = false) Locale locale) {
-        License license = licenseService.getLicense(licenseId, organizationId);
+        License license = licenseService.getLicense(licenseId, organizationId, locale);
         return ResponseEntity.ok(addLinks(organizationId, license, locale));
     }
 
@@ -52,10 +52,11 @@ class LicenseController {
     }
 
     @DeleteMapping("/{licenseId}")
-    ResponseEntity<String> deleteLicense(@PathVariable("organizationId") String organizationId,
+    ResponseEntity<Void> deleteLicense(@PathVariable("organizationId") String organizationId,
             @PathVariable("licenseId") String licenseId,
             @RequestHeader(value = "Accept-Language", required = false) Locale locale) {
-        return ResponseEntity.ok(licenseService.deleteLicense(licenseId, organizationId, locale));
+        licenseService.deleteLicense(licenseId, organizationId, locale);
+        return ResponseEntity.ok(null);
     }
 
     private License addLinks(String organizationId, License license, Locale locale) {

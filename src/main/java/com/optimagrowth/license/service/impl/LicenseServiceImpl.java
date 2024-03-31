@@ -1,56 +1,87 @@
 package com.optimagrowth.license.service.impl;
 
 import java.util.Locale;
-import java.util.Random;
+import java.util.Objects;
+import java.util.UUID;
 
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
+import com.optimagrowth.license.exception.NotFoundException;
 import com.optimagrowth.license.model.License;
+import com.optimagrowth.license.repository.LicenseRepository;
 import com.optimagrowth.license.service.LicenseService;
+import com.optimagrowth.license.service.MessageService;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 class LicenseServiceImpl implements LicenseService {
 
-    private final Random random = new Random();
-    private final MessageSource messageSource;
+    private static final String LICENSE_CREATE_MESSAGE = "license.create.message";
+    private static final String LICENSE_UPDATE_MESSAGE = "license.update.message";
+    private static final String LICENSE_DELETE_MESSAGE = "license.delete.message";
+    private static final String LICENSE_CANNOT_BE_NULL = "license.cannot.be.null";
+    private static final String LICENCE_NOT_FOUND = "license.not.found";
 
-    LicenseServiceImpl(MessageSource messageSource) {
-        this.messageSource = messageSource;
+    private final LicenseRepository licenseRepository;
+    private final MessageService messageService;
+
+    LicenseServiceImpl(LicenseRepository licenseRepository, MessageService messageService) {
+        this.licenseRepository = licenseRepository;
+        this.messageService = messageService;
     }
 
     @Override
-    public License getLicense(String licenseId, String organizationId) {
-        License license = new License();
-        license.setId(random.nextInt(1000));
-        license.setLicenseId(licenseId);
-        license.setOrganizationId(organizationId);
-        license.setDescription("Software product");
-        license.setProductName("Ostock");
-        license.setLicenseType("full");
+    public License getLicense(String licenseId, String organizationId, Locale locale) {
+        var license = licenseRepository.findByOrganizationIdAndLicenseId(organizationId, licenseId);
+
+        if (license == null) {
+            throw new NotFoundException(
+                    messageService.getMessage(LICENCE_NOT_FOUND, locale, licenseId, organizationId));
+        }
+
         return license;
     }
 
     @Override
-    public String createLicense(License license, String organizationId, Locale locale) {
-        if (license != null) {
-            license.setOrganizationId(organizationId);
-            return messageSource.getMessage("license.create.message", new Object[] { license }, locale);
-        }
-        return null;
+    public License createLicense(License license, String organizationId, Locale locale) {
+        Objects.requireNonNull(license, messageService.getMessage(LICENSE_CANNOT_BE_NULL, locale, license));
+
+        license.setLicenseId(UUID.randomUUID().toString());
+        license.setOrganizationId(organizationId);
+
+        var newLicense = licenseRepository.save(license);
+
+        log.info(messageService.getMessage(LICENSE_CREATE_MESSAGE, locale, license));
+
+        return newLicense;
     }
 
     @Override
-    public String updateLicense(License license, String organizationId, Locale locale) {
-        if (license != null) {
-            license.setOrganizationId(organizationId);
-            return messageSource.getMessage("license.update.message", new Object[] { license }, locale);
-        }
-        return null;
+    public License updateLicense(License license, String organizationId, Locale locale) {
+        Objects.requireNonNull(license, messageService.getMessage(LICENSE_CANNOT_BE_NULL, locale, license));
+
+        license.setOrganizationId(organizationId);
+
+        var updatedLicense = licenseRepository.save(license);
+
+        log.info(messageService.getMessage(LICENSE_UPDATE_MESSAGE, locale, license));
+
+        return updatedLicense;
     }
 
     @Override
-    public String deleteLicense(String licenseId, String organizationId, Locale locale) {
-        return messageSource.getMessage("license.delete.message", new Object[] { licenseId, organizationId }, locale);
+    public void deleteLicense(String licenseId, String organizationId, Locale locale) {
+        var license = licenseRepository.findByOrganizationIdAndLicenseId(organizationId, licenseId);
+
+        if (license == null) {
+            throw new NotFoundException(
+                    messageService.getMessage(LICENCE_NOT_FOUND, locale, licenseId, organizationId));
+        }
+
+        licenseRepository.delete(license);
+
+        log.info(messageService.getMessage(LICENSE_DELETE_MESSAGE, locale, licenseId, organizationId));
     }
 }
