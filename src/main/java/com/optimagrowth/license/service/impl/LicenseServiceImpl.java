@@ -8,9 +8,11 @@ import org.springframework.stereotype.Service;
 
 import com.optimagrowth.license.exception.NotFoundException;
 import com.optimagrowth.license.model.License;
+import com.optimagrowth.license.model.Organization;
 import com.optimagrowth.license.repository.LicenseRepository;
 import com.optimagrowth.license.service.LicenseService;
 import com.optimagrowth.license.service.MessageService;
+import com.optimagrowth.license.service.client.OrganizationFeignClient;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,10 +28,13 @@ class LicenseServiceImpl implements LicenseService {
 
     private final LicenseRepository licenseRepository;
     private final MessageService messageService;
+    private final OrganizationFeignClient organizationFeignClient;
 
-    LicenseServiceImpl(LicenseRepository licenseRepository, MessageService messageService) {
+    LicenseServiceImpl(LicenseRepository licenseRepository, MessageService messageService,
+            OrganizationFeignClient organizationFeignClient) {
         this.licenseRepository = licenseRepository;
         this.messageService = messageService;
+        this.organizationFeignClient = organizationFeignClient;
     }
 
     @Override
@@ -39,6 +44,15 @@ class LicenseServiceImpl implements LicenseService {
         if (license == null) {
             throw new NotFoundException(
                     messageService.getMessage(LICENCE_NOT_FOUND, locale, licenseId, organizationId));
+        }
+
+        Organization organization = organizationFeignClient.getOrganization(organizationId);
+
+        if (organization != null) {
+            license.setOrganizationName(organization.getName());
+            license.setContactName(organization.getContactName());
+            license.setContactEmail(organization.getContactEmail());
+            license.setContactPhone(organization.getContactPhone());
         }
 
         return license;
