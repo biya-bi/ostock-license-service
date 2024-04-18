@@ -3,7 +3,9 @@ package com.optimagrowth.license.controller;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -57,6 +59,14 @@ class LicenseController {
             @RequestHeader(value = "Accept-Language", required = false) Locale locale) {
         licenseService.deleteLicense(licenseId, organizationId, locale);
         return ResponseEntity.ok(null);
+    }
+
+    ResponseEntity<List<License>> getLicenses(@PathVariable("organizationId") String organizationId,
+            @RequestHeader(value = "Accept-Language", required = false) Locale locale) {
+        var licenses = licenseService.getLicenses(organizationId).stream()
+                .map(license -> this.addLinks(organizationId, license, locale)).collect(Collectors.toList());
+
+        return ResponseEntity.ok(licenses);
     }
 
     private License addLinks(String organizationId, License license, Locale locale) {

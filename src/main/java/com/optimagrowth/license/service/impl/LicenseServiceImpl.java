@@ -1,5 +1,6 @@
 package com.optimagrowth.license.service.impl;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.UUID;
@@ -98,4 +99,10 @@ class LicenseServiceImpl implements LicenseService {
 
         log.info(messageService.getMessage(LICENSE_DELETE_MESSAGE, locale, licenseId, organizationId));
     }
+
+    @Override
+    public List<License> getLicenses(String organizationId) {
+        return licenseRepository.findByOrganizationId(organizationId);
+    }
+
 }
