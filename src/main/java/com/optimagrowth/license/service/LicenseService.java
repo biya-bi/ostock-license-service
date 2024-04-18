@@ -4,6 +4,9 @@ import java.util.Locale;
 
 import com.optimagrowth.license.model.License;
 
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
+
+@RateLimiter(name = "licenseService")
 public interface LicenseService {
     License getLicense(String licenseId, String organizationId, Locale locale);
 
