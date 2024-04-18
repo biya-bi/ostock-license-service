@@ -7,6 +7,9 @@ import org.springframework.stereotype.Repository;
 
 import com.optimagrowth.license.model.License;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+
+@CircuitBreaker(name = "licenseRepository")
 @Repository
 public interface LicenseRepository extends CrudRepository<License, String> {
     List<License> findByOrganizationId(String organizationId);
