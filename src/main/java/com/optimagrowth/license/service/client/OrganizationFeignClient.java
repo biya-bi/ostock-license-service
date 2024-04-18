@@ -7,9 +7,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import com.optimagrowth.license.model.Organization;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 
 @FeignClient("organization-service")
 @CircuitBreaker(name = "organizationFeignClient")
+@Retry(name = "organizationFeignClient")
 public interface OrganizationFeignClient {
     @GetMapping("/v1/organization/{organizationId}")
     Organization getOrganization(@PathVariable("organizationId") String organizationId);
