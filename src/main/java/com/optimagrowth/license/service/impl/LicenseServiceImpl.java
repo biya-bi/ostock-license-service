@@ -15,10 +15,12 @@ import com.optimagrowth.license.service.LicenseService;
 import com.optimagrowth.license.service.MessageService;
 import com.optimagrowth.license.service.client.OrganizationFeignClient;
 
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
+@RateLimiter(name = "licenseService")
 class LicenseServiceImpl implements LicenseService {
 
     private static final String LICENSE_CREATE_MESSAGE = "license.create.message";
