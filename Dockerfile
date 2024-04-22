@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM eclipse-temurin:17-jdk-jammy AS base
+FROM ostock-maven:latest AS base
 WORKDIR /app
 COPY .mvn/ .mvn
 COPY mvnw pom.xml ./
