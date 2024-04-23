@@ -61,6 +61,7 @@ class LicenseController {
         return ResponseEntity.ok(null);
     }
 
+    @GetMapping
     ResponseEntity<List<License>> getLicenses(@PathVariable("organizationId") String organizationId,
             @RequestHeader(value = "Accept-Language", required = false) Locale locale) {
         var licenses = licenseService.getLicenses(organizationId).stream()
