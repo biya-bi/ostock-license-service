@@ -22,7 +22,7 @@ import com.optimagrowth.license.model.License;
 import com.optimagrowth.license.service.LicenseService;
 
 @RestController
-@RequestMapping(value = "v1/organization/{organizationId}/license")
+@RequestMapping(value = "v1/license/{organizationId}")
 class LicenseController {
 
     private final LicenseService licenseService;
