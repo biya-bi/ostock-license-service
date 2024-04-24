@@ -9,7 +9,7 @@ import com.optimagrowth.license.model.Organization;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 
-@FeignClient("gateway-service/organization-service")
+@FeignClient("organization-service")
 @CircuitBreaker(name = "organizationFeignClient")
 @Retry(name = "organizationFeignClient")
 public interface OrganizationFeignClient {
