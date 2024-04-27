@@ -13,6 +13,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import com.optimagrowth.license.service.MessageService;
 
+import feign.FeignException;
 import io.github.resilience4j.ratelimiter.RequestNotPermitted;
 import lombok.extern.slf4j.Slf4j;
 
@@ -43,6 +44,13 @@ class RestExceptionHandler extends ResponseEntityExceptionHandler {
             @RequestHeader(value = "Accept-Language", required = false) Locale locale) {
         log.error(messageService.getMessage(UNEXPECTED_ERROR_OCCURRED, locale), e);
         return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
+    }
+
+    @ExceptionHandler(FeignException.Unauthorized.class)
+    ResponseEntity<Void> handle(FeignException.Unauthorized e,
+            @RequestHeader(value = "Accept-Language", required = false) Locale locale) {
+        log.error(messageService.getMessage(UNEXPECTED_ERROR_OCCURRED, locale), e);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
     @ExceptionHandler(Exception.class)
