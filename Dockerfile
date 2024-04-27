@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM ostock-maven:latest AS base
+FROM ostock-17-jdk-jammy-maven:latest AS base
 WORKDIR /app
 COPY .mvn/ .mvn
 COPY mvnw pom.xml ./
