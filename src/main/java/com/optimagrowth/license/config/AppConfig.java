@@ -7,11 +7,11 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
 
-import com.optimagrowth.config.CrossCuttingConcernsConfig;
+import com.optimagrowth.config.UserContextConfig;
 import com.optimagrowth.config.SecurityConfig;
 
 @Configuration
-@ComponentScan(basePackageClasses = { CrossCuttingConcernsConfig.class, SecurityConfig.class })
+@ComponentScan(basePackageClasses = { UserContextConfig.class, SecurityConfig.class })
 class AppConfig {
 
     @Bean
