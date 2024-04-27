@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import com.optimagrowth.license.exception.NotFoundException;
 import com.optimagrowth.license.model.License;
-import com.optimagrowth.license.model.Organization;
 import com.optimagrowth.license.repository.LicenseRepository;
 import com.optimagrowth.license.service.LicenseService;
 import com.optimagrowth.license.service.MessageService;
@@ -49,7 +48,7 @@ class LicenseServiceImpl implements LicenseService {
                     messageService.getMessage(LICENCE_NOT_FOUND, locale, licenseId, organizationId));
         }
 
-        Organization organization = organizationFeignClient.getOrganization(organizationId);
+        var organization = organizationFeignClient.getOrganization(organizationId);
 
         if (organization != null) {
             license.setOrganizationName(organization.getName());
