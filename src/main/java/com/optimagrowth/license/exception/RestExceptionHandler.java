@@ -1,17 +1,14 @@
 package com.optimagrowth.license.exception;
 
-import java.util.Locale;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.optimagrowth.license.service.MessageService;
+import com.optimagrowth.service.MessageService;
 
 import feign.FeignException;
 import io.github.resilience4j.ratelimiter.RequestNotPermitted;
@@ -33,30 +30,26 @@ class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(NotFoundException.class)
     @ResponseBody
-    ResponseEntity<Void> handle(NotFoundException e,
-            @RequestHeader(value = "Accept-Language", required = false) Locale locale) {
-        log.error(messageService.getMessage(RESOURCE_NOT_FOUND, locale), e);
+    ResponseEntity<Void> handle(NotFoundException e) {
+        log.error(messageService.getMessage(RESOURCE_NOT_FOUND), e);
         return ResponseEntity.notFound().build();
     }
 
     @ExceptionHandler(RequestNotPermitted.class)
-    ResponseEntity<Void> handle(RequestNotPermitted e,
-            @RequestHeader(value = "Accept-Language", required = false) Locale locale) {
-        log.error(messageService.getMessage(UNEXPECTED_ERROR_OCCURRED, locale), e);
+    ResponseEntity<Void> handle(RequestNotPermitted e) {
+        log.error(messageService.getMessage(UNEXPECTED_ERROR_OCCURRED), e);
         return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
     }
 
     @ExceptionHandler(FeignException.Unauthorized.class)
-    ResponseEntity<Void> handle(FeignException.Unauthorized e,
-            @RequestHeader(value = "Accept-Language", required = false) Locale locale) {
-        log.error(messageService.getMessage(UNEXPECTED_ERROR_OCCURRED, locale), e);
+    ResponseEntity<Void> handle(FeignException.Unauthorized e) {
+        log.error(messageService.getMessage(UNEXPECTED_ERROR_OCCURRED), e);
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
     @ExceptionHandler(Exception.class)
-    ResponseEntity<Void> handle(Exception e,
-            @RequestHeader(value = "Accept-Language", required = false) Locale locale) {
-        log.error(messageService.getMessage(UNEXPECTED_ERROR_OCCURRED, locale), e);
+    ResponseEntity<Void> handle(Exception e) {
+        log.error(messageService.getMessage(UNEXPECTED_ERROR_OCCURRED), e);
         return ResponseEntity.internalServerError().build();
     }
 
