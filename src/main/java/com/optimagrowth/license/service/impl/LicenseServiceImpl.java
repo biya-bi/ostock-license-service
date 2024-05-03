@@ -25,7 +25,7 @@ class LicenseServiceImpl implements LicenseService {
     private static final String LICENSE_UPDATE_MESSAGE = "license.update.message";
     private static final String LICENSE_DELETE_MESSAGE = "license.delete.message";
     private static final String LICENSE_CANNOT_BE_NULL = "license.cannot.be.null";
-    private static final String LICENCE_NOT_FOUND = "license.not.found";
+    private static final String LICENCE_NOT_FOUND = "license.not.found";// TODO: Fix this key. Not the same key in the resource file
 
     private final LicenseRepository licenseRepository;
     private final MessageService messageService;
