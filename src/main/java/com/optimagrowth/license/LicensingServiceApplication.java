@@ -3,7 +3,7 @@ package com.optimagrowth.license;
 import java.io.IOException;
 import java.util.Map;
 
-import org.rainbow.io.EnvFileReader;
+import org.nguiland.io.EnvFileReader;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
