@@ -1,6 +1,7 @@
 package com.optimagrowth.license.repository;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -11,8 +12,8 @@ import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 
 @CircuitBreaker(name = "licenseRepository")
 @Repository
-public interface LicenseRepository extends CrudRepository<License, String> {
-    List<License> findByOrganizationId(String organizationId);
+public interface LicenseRepository extends CrudRepository<License, UUID> {
+    List<License> findByOrganizationId(UUID organizationId);
 
-    License findByOrganizationIdAndId(String organizationId, String licenseId);
+    License findByOrganizationIdAndId(UUID organizationId, UUID licenseId);
 }

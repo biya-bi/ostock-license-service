@@ -1,5 +1,7 @@
 package com.optimagrowth.license.model;
 
+import java.util.UUID;
+
 import org.springframework.hateoas.RepresentationModel;
 
 import jakarta.persistence.Column;
@@ -17,13 +19,13 @@ import lombok.ToString;
 public class License extends RepresentationModel<License> {
     @Id
     @Column(name = "license_id", nullable = false)
-    private String id;
+    private UUID id;
     
     @Column(name = "description")
     private String description;
 
     @Column(name = "organization_id", nullable = false)
-    private String organizationId;
+    private UUID organizationId;
 
     @Column(name = "product_name", nullable = false)
     private String productName;
