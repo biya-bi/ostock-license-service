@@ -30,36 +30,36 @@ class LicenseController {
     }
 
     @GetMapping("/{licenseId}")
-    ResponseEntity<License> getLicense(@PathVariable("organizationId") String organizationId,
+    ResponseEntity<License> read(@PathVariable("organizationId") String organizationId,
             @PathVariable("licenseId") String licenseId) {
-        License license = licenseService.getLicense(licenseId, organizationId);
+        License license = licenseService.read(licenseId, organizationId);
         return ResponseEntity.ok(addLinks(organizationId, license));
     }
 
     @PostMapping
-    ResponseEntity<License> createLicense(@PathVariable("organizationId") String organizationId,
+    ResponseEntity<License> create(@PathVariable("organizationId") String organizationId,
             @RequestBody License license) {
-        licenseService.createLicense(license, organizationId);
+        licenseService.create(license, organizationId);
         return ResponseEntity.ok(addLinks(organizationId, license));
     }
 
     @PutMapping
-    ResponseEntity<License> updateLicense(@PathVariable("organizationId") String organizationId,
+    ResponseEntity<License> update(@PathVariable("organizationId") String organizationId,
             @RequestBody License license) {
-        licenseService.updateLicense(license, organizationId);
+        licenseService.update(license, organizationId);
         return ResponseEntity.ok(addLinks(organizationId, license));
     }
 
     @DeleteMapping("/{licenseId}")
-    ResponseEntity<Void> deleteLicense(@PathVariable("organizationId") String organizationId,
+    ResponseEntity<Void> delete(@PathVariable("organizationId") String organizationId,
             @PathVariable("licenseId") String licenseId) {
-        licenseService.deleteLicense(licenseId, organizationId);
+        licenseService.delete(licenseId, organizationId);
         return ResponseEntity.ok(null);
     }
 
     @GetMapping
-    ResponseEntity<CollectionModel<License>> getLicenses(@PathVariable("organizationId") String organizationId) {
-        var licenses = licenseService.getLicenses(organizationId).stream()
+    ResponseEntity<CollectionModel<License>> read(@PathVariable("organizationId") String organizationId) {
+        var licenses = licenseService.read(organizationId).stream()
                 .map(license -> this.addLinks(organizationId, license)).collect(Collectors.toList());
 
         return ResponseEntity.ok(CollectionModel.of(licenses));
@@ -67,9 +67,9 @@ class LicenseController {
 
     private License addLinks(String organizationId, License license) {
         LicenseController methodOn = methodOn(LicenseController.class);
-        return license.add(linkTo(methodOn.getLicense(organizationId, license.getId())).withSelfRel(),
-                linkTo(methodOn.updateLicense(organizationId, license)).withRel("update"),
-                linkTo(methodOn.deleteLicense(organizationId, license.getId())).withRel("delete"));
+        return license.add(linkTo(methodOn.read(organizationId, license.getId())).withSelfRel(),
+                linkTo(methodOn.update(organizationId, license)).withRel("update"),
+                linkTo(methodOn.delete(organizationId, license.getId())).withRel("delete"));
     }
 
 }

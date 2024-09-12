@@ -39,7 +39,7 @@ class LicenseServiceImpl implements LicenseService {
     }
 
     @Override
-    public License getLicense(String licenseId, String organizationId) {
+    public License read(String licenseId, String organizationId) {
         var license = licenseRepository.findByOrganizationIdAndLicenseId(organizationId, licenseId);
 
         if (license == null) {
@@ -60,7 +60,7 @@ class LicenseServiceImpl implements LicenseService {
     }
 
     @Override
-    public License createLicense(License license, String organizationId) {
+    public License create(License license, String organizationId) {
         Objects.requireNonNull(license, messageService.getMessage(LICENSE_CANNOT_BE_NULL, license));
 
         license.setId(UUID.randomUUID().toString());
@@ -74,7 +74,7 @@ class LicenseServiceImpl implements LicenseService {
     }
 
     @Override
-    public License updateLicense(License license, String organizationId) {
+    public License update(License license, String organizationId) {
         Objects.requireNonNull(license, messageService.getMessage(LICENSE_CANNOT_BE_NULL, license));
 
         license.setOrganizationId(organizationId);
@@ -87,7 +87,7 @@ class LicenseServiceImpl implements LicenseService {
     }
 
     @Override
-    public void deleteLicense(String licenseId, String organizationId) {
+    public void delete(String licenseId, String organizationId) {
         var license = licenseRepository.findByOrganizationIdAndLicenseId(organizationId, licenseId);
 
         if (license == null) {
@@ -101,7 +101,7 @@ class LicenseServiceImpl implements LicenseService {
     }
 
     @Override
-    public List<License> getLicenses(String organizationId) {
+    public List<License> read(String organizationId) {
         return licenseRepository.findByOrganizationId(organizationId);
     }
 
