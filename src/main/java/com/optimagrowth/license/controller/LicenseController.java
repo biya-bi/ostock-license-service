@@ -39,15 +39,15 @@ class LicenseController {
     @PostMapping
     ResponseEntity<License> create(@PathVariable("organizationId") String organizationId,
             @RequestBody License license) {
-        licenseService.create(license, organizationId);
-        return ResponseEntity.ok(addLinks(organizationId, license));
+        var newLicense = licenseService.create(license, organizationId);
+        return ResponseEntity.ok(addLinks(organizationId, newLicense));
     }
 
     @PutMapping
     ResponseEntity<License> update(@PathVariable("organizationId") String organizationId,
             @RequestBody License license) {
-        licenseService.update(license, organizationId);
-        return ResponseEntity.ok(addLinks(organizationId, license));
+        var updatedLicense = licenseService.update(license, organizationId);
+        return ResponseEntity.ok(addLinks(organizationId, updatedLicense));
     }
 
     @DeleteMapping("/{licenseId}")
