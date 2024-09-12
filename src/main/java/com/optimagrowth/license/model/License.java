@@ -15,7 +15,7 @@ import lombok.ToString;
 @Data
 @ToString
 @Entity
-@Table(name="licenses")
+@Table(name="license")
 public class License extends RepresentationModel<License> {
     @Id
     @Column(nullable = false)
