@@ -32,7 +32,7 @@ class LicenseController {
     @GetMapping("/{licenseId}")
     ResponseEntity<License> read(@PathVariable("organizationId") String organizationId,
             @PathVariable("licenseId") String licenseId) {
-        License license = licenseService.read(licenseId, organizationId);
+        var license = licenseService.read(licenseId, organizationId);
         return ResponseEntity.ok(addLinks(organizationId, license));
     }
 
@@ -66,10 +66,10 @@ class LicenseController {
     }
 
     private License addLinks(String organizationId, License license) {
-        LicenseController methodOn = methodOn(LicenseController.class);
-        return license.add(linkTo(methodOn.read(organizationId, license.getId())).withSelfRel(),
-                linkTo(methodOn.update(organizationId, license)).withRel("update"),
-                linkTo(methodOn.delete(organizationId, license.getId())).withRel("delete"));
+        var licenseController = methodOn(LicenseController.class);
+        return license.add(linkTo(licenseController.read(organizationId, license.getId())).withSelfRel(),
+                linkTo(licenseController.update(organizationId, license)).withRel("update"),
+                linkTo(licenseController.delete(organizationId, license.getId())).withRel("delete"));
     }
 
 }
