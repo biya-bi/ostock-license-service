@@ -67,9 +67,9 @@ class LicenseController {
 
     private License addLinks(String organizationId, License license) {
         LicenseController methodOn = methodOn(LicenseController.class);
-        return license.add(linkTo(methodOn.getLicense(organizationId, license.getLicenseId())).withSelfRel(),
+        return license.add(linkTo(methodOn.getLicense(organizationId, license.getId())).withSelfRel(),
                 linkTo(methodOn.updateLicense(organizationId, license)).withRel("update"),
-                linkTo(methodOn.deleteLicense(organizationId, license.getLicenseId())).withRel("delete"));
+                linkTo(methodOn.deleteLicense(organizationId, license.getId())).withRel("delete"));
     }
 
 }

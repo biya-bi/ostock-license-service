@@ -63,7 +63,7 @@ class LicenseServiceImpl implements LicenseService {
     public License createLicense(License license, String organizationId) {
         Objects.requireNonNull(license, messageService.getMessage(LICENSE_CANNOT_BE_NULL, license));
 
-        license.setLicenseId(UUID.randomUUID().toString());
+        license.setId(UUID.randomUUID().toString());
         license.setOrganizationId(organizationId);
 
         var newLicense = licenseRepository.save(license);
