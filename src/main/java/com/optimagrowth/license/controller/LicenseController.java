@@ -3,9 +3,9 @@ package com.optimagrowth.license.controller;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -58,11 +58,11 @@ class LicenseController {
     }
 
     @GetMapping
-    ResponseEntity<List<License>> getLicenses(@PathVariable("organizationId") String organizationId) {
+    ResponseEntity<CollectionModel<License>> getLicenses(@PathVariable("organizationId") String organizationId) {
         var licenses = licenseService.getLicenses(organizationId).stream()
                 .map(license -> this.addLinks(organizationId, license)).collect(Collectors.toList());
 
-        return ResponseEntity.ok(licenses);
+        return ResponseEntity.ok(CollectionModel.of(licenses));
     }
 
     private License addLinks(String organizationId, License license) {
