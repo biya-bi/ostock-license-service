@@ -4,10 +4,10 @@ FROM eclipse-temurin:21-jre-alpine
 
 WORKDIR /opt/ostock
 
-COPY target/*.jar ./licensing-service.jar
+COPY target/*.jar ./license-service.jar
 
 COPY certs/* /etc/ssl/certs/
 
 RUN keytool -import -alias nguiland -keystore /opt/java/openjdk/lib/security/cacerts -file /etc/ssl/certs/__nguiland_org.crt -noprompt
 
-ENTRYPOINT java -jar ./licensing-service.jar
+ENTRYPOINT java -jar ./license-service.jar
