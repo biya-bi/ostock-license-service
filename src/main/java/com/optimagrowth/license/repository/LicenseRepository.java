@@ -14,5 +14,5 @@ import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 public interface LicenseRepository extends CrudRepository<License, String> {
     List<License> findByOrganizationId(String organizationId);
 
-    License findByOrganizationIdAndLicenseId(String organizationId, String licenseId);
+    License findByOrganizationIdAndId(String organizationId, String licenseId);
 }

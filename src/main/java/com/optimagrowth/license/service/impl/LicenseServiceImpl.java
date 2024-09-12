@@ -40,7 +40,7 @@ class LicenseServiceImpl implements LicenseService {
 
     @Override
     public License read(String licenseId, String organizationId) {
-        var license = licenseRepository.findByOrganizationIdAndLicenseId(organizationId, licenseId);
+        var license = licenseRepository.findByOrganizationIdAndId(organizationId, licenseId);
 
         if (license == null) {
             throw new NotFoundException(
@@ -88,7 +88,7 @@ class LicenseServiceImpl implements LicenseService {
 
     @Override
     public void delete(String licenseId, String organizationId) {
-        var license = licenseRepository.findByOrganizationIdAndLicenseId(organizationId, licenseId);
+        var license = licenseRepository.findByOrganizationIdAndId(organizationId, licenseId);
 
         if (license == null) {
             throw new NotFoundException(
