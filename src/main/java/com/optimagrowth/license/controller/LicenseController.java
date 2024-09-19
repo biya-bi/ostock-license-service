@@ -76,8 +76,8 @@ class LicenseController {
     }
 
     private LicenseDto toDto(License license) {
-        UUID organizationId = license.getOrganization().getId();
-        UUID licenseId = license.getId();
+        var organizationId = license.getOrganization().getId();
+        var licenseId = license.getId();
 
         var dto = LicenseTranslator.translate(license);
         dto.add(linkTo(licenseControllerMethodOn.read(organizationId, licenseId)).withSelfRel(),
