@@ -17,8 +17,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.optimagrowth.license.model.License;
+import com.optimagrowth.license.dto.LicenseDto;
 import com.optimagrowth.license.service.LicenseService;
+import com.optimagrowth.license.translator.LicenseTranslator;
 
 @RestController
 @RequestMapping("/v1/license/{organizationId}")
@@ -31,24 +32,29 @@ class LicenseController {
     }
 
     @GetMapping("/{licenseId}")
-    ResponseEntity<License> read(@PathVariable("organizationId") UUID organizationId,
+    ResponseEntity<LicenseDto> read(@PathVariable("organizationId") UUID organizationId,
             @PathVariable("licenseId") UUID licenseId) {
         var license = licenseService.read(licenseId, organizationId);
-        return ResponseEntity.ok(addLinks(organizationId, license));
+        var dto = LicenseTranslator.translate(license);
+        return ResponseEntity.ok(addLinks(organizationId, dto));
     }
 
     @PostMapping
-    ResponseEntity<License> create(@PathVariable("organizationId") UUID organizationId,
-            @RequestBody License license) {
-        var newLicense = licenseService.create(license, organizationId);
-        return ResponseEntity.ok(addLinks(organizationId, newLicense));
+    ResponseEntity<LicenseDto> create(@PathVariable("organizationId") UUID organizationId,
+            @RequestBody LicenseDto payload) {
+        var license = LicenseTranslator.translate(payload);
+        var createdLicense = licenseService.create(license, organizationId);
+        var dto = LicenseTranslator.translate(createdLicense);
+        return ResponseEntity.ok(addLinks(organizationId, dto));
     }
 
     @PutMapping
-    ResponseEntity<License> update(@PathVariable("organizationId") UUID organizationId,
-            @RequestBody License license) {
+    ResponseEntity<LicenseDto> update(@PathVariable("organizationId") UUID organizationId,
+            @RequestBody LicenseDto payload) {
+        var license = LicenseTranslator.translate(payload);
         var updatedLicense = licenseService.update(license, organizationId);
-        return ResponseEntity.ok(addLinks(organizationId, updatedLicense));
+        var dto = LicenseTranslator.translate(updatedLicense);
+        return ResponseEntity.ok(addLinks(organizationId, dto));
     }
 
     @DeleteMapping("/{licenseId}")
@@ -59,18 +65,18 @@ class LicenseController {
     }
 
     @GetMapping
-    ResponseEntity<CollectionModel<License>> read(@PathVariable("organizationId") UUID organizationId) {
-        var licenses = licenseService.read(organizationId).stream()
-                .map(license -> this.addLinks(organizationId, license)).collect(Collectors.toList());
+    ResponseEntity<CollectionModel<LicenseDto>> read(@PathVariable("organizationId") UUID organizationId) {
+        var dtos = licenseService.read(organizationId).stream()
+                .map(license -> this.addLinks(organizationId, LicenseTranslator.translate(license))).collect(Collectors.toList());
 
-        return ResponseEntity.ok(CollectionModel.of(licenses));
+        return ResponseEntity.ok(CollectionModel.of(dtos));
     }
 
-    private License addLinks(UUID organizationId, License license) {
+    private LicenseDto addLinks(UUID organizationId, LicenseDto dto) {
         var licenseController = methodOn(LicenseController.class);
-        return license.add(linkTo(licenseController.read(organizationId, license.getId())).withSelfRel(),
-                linkTo(licenseController.update(organizationId, license)).withRel("update"),
-                linkTo(licenseController.delete(organizationId, license.getId())).withRel("delete"));
+        return dto.add(linkTo(licenseController.read(organizationId, dto.getId())).withSelfRel(),
+                linkTo(licenseController.update(organizationId, dto)).withRel("update"),
+                linkTo(licenseController.delete(organizationId, dto.getId())).withRel("delete"));
     }
 
 }

@@ -6,6 +6,7 @@ import java.util.Map;
 import org.nguiland.io.EnvFileReader;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -14,6 +15,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 @RefreshScope
 @EnableFeignClients
 @EnableMethodSecurity
+@EntityScan("com.optimagrowth.orm.model")
 public class LicensingServiceApplication {
 
 	public static void main(String[] args) throws IOException {

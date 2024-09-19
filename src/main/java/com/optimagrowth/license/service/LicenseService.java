@@ -3,7 +3,7 @@ package com.optimagrowth.license.service;
 import java.util.List;
 import java.util.UUID;
 
-import com.optimagrowth.license.model.License;
+import com.optimagrowth.orm.model.License;
 
 public interface LicenseService {
     License read(UUID licenseId, UUID organizationId);

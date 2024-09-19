@@ -7,10 +7,11 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 import com.optimagrowth.license.exception.NotFoundException;
-import com.optimagrowth.license.model.License;
 import com.optimagrowth.license.repository.LicenseRepository;
 import com.optimagrowth.license.service.LicenseService;
 import com.optimagrowth.license.service.client.OrganizationFeignClient;
+import com.optimagrowth.orm.model.License;
+import com.optimagrowth.orm.model.Organization;
 import com.optimagrowth.service.MessageService;
 
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
@@ -47,15 +48,6 @@ class LicenseServiceImpl implements LicenseService {
                     messageService.getMessage(LICENSE_NOT_FOUND, licenseId, organizationId));
         }
 
-        var organization = organizationFeignClient.getOrganization(organizationId);
-
-        if (organization != null) {
-            license.setOrganizationName(organization.getName());
-            license.setContactName(organization.getContactName());
-            license.setContactEmail(organization.getContactEmail());
-            license.setContactPhone(organization.getContactPhone());
-        }
-
         return license;
     }
 
@@ -63,8 +55,11 @@ class LicenseServiceImpl implements LicenseService {
     public License create(License license, UUID organizationId) {
         Objects.requireNonNull(license, messageService.getMessage(LICENSE_CANNOT_BE_NULL, license));
 
+        var organization = new Organization();
+        organization.setId(organizationId);
+
         license.setId(UUID.randomUUID());
-        license.setOrganizationId(organizationId);
+        license.setOrganization(organization);
 
         var newLicense = licenseRepository.save(license);
 
@@ -77,7 +72,10 @@ class LicenseServiceImpl implements LicenseService {
     public License update(License license, UUID organizationId) {
         Objects.requireNonNull(license, messageService.getMessage(LICENSE_CANNOT_BE_NULL, license));
 
-        license.setOrganizationId(organizationId);
+        var organization = new Organization();
+        organization.setId(organizationId);
+
+        license.setOrganization(organization);
 
         var updatedLicense = licenseRepository.save(license);
 
