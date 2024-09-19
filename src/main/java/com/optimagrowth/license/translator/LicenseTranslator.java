@@ -1,5 +1,7 @@
 package com.optimagrowth.license.translator;
 
+import java.util.UUID;
+
 import com.optimagrowth.license.dto.LicenseDto;
 import com.optimagrowth.orm.model.License;
 import com.optimagrowth.orm.model.Organization;
@@ -9,17 +11,21 @@ public final class LicenseTranslator {
     }
 
     public static LicenseDto translate(License license) {
-        return new LicenseDto(license.getId(), license.getDescription(), license.getOrganization().getId(),
-                license.getProductName(), license.getLicenseType(), license.getComment());
+        return new LicenseDto(license.getDescription(), license.getProductName(), license.getLicenseType(),
+                license.getComment());
     }
 
-    public static License translate(LicenseDto dto) {
+    public static License translate(LicenseDto dto, UUID organizationId) {
+        return translate(dto, organizationId, null);
+    }
+
+    public static License translate(LicenseDto dto, UUID organizationId, UUID licenseId) {
         var organization = new Organization();
-        organization.setId(dto.getOrganizationId());
+        organization.setId(organizationId);
 
         var license = new License();
 
-        license.setId(dto.getId());
+        license.setId(licenseId);
         license.setDescription(dto.getDescription());
         license.setOrganization(organization);
         license.setProductName(dto.getProductName());
