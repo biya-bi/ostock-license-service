@@ -9,9 +9,7 @@ import org.springframework.stereotype.Service;
 import com.optimagrowth.license.exception.NotFoundException;
 import com.optimagrowth.license.repository.LicenseRepository;
 import com.optimagrowth.license.service.LicenseService;
-import com.optimagrowth.license.service.client.OrganizationFeignClient;
 import com.optimagrowth.orm.model.License;
-import com.optimagrowth.orm.model.Organization;
 import com.optimagrowth.service.MessageService;
 
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
@@ -30,13 +28,10 @@ class LicenseServiceImpl implements LicenseService {
 
     private final LicenseRepository licenseRepository;
     private final MessageService messageService;
-    private final OrganizationFeignClient organizationFeignClient;
 
-    LicenseServiceImpl(LicenseRepository licenseRepository, MessageService messageService,
-            OrganizationFeignClient organizationFeignClient) {
+    LicenseServiceImpl(LicenseRepository licenseRepository, MessageService messageService) {
         this.licenseRepository = licenseRepository;
         this.messageService = messageService;
-        this.organizationFeignClient = organizationFeignClient;
     }
 
     @Override
@@ -52,30 +47,21 @@ class LicenseServiceImpl implements LicenseService {
     }
 
     @Override
-    public License create(License license, UUID organizationId) {
+    public License create(License license) {
         Objects.requireNonNull(license, messageService.getMessage(LICENSE_CANNOT_BE_NULL, license));
 
-        var organization = new Organization();
-        organization.setId(organizationId);
-
         license.setId(UUID.randomUUID());
-        license.setOrganization(organization);
 
-        var newLicense = licenseRepository.save(license);
+        var createdLicense = licenseRepository.save(license);
 
         log.info(messageService.getMessage(LICENSE_CREATE_MESSAGE, license));
 
-        return newLicense;
+        return createdLicense;
     }
 
     @Override
-    public License update(License license, UUID organizationId) {
+    public License update(License license) {
         Objects.requireNonNull(license, messageService.getMessage(LICENSE_CANNOT_BE_NULL, license));
-
-        var organization = new Organization();
-        organization.setId(organizationId);
-
-        license.setOrganization(organization);
 
         var updatedLicense = licenseRepository.save(license);
 

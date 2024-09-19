@@ -43,7 +43,7 @@ class LicenseController {
     ResponseEntity<LicenseDto> create(@PathVariable("organizationId") UUID organizationId,
             @RequestBody LicenseDto payload) {
         var license = LicenseTranslator.translate(payload, organizationId);
-        var createdLicense = licenseService.create(license, organizationId);
+        var createdLicense = licenseService.create(license);
         return ResponseEntity.ok(toDto(organizationId, createdLicense));
     }
 
@@ -52,7 +52,7 @@ class LicenseController {
             @PathVariable("licenseId") UUID licenseId,
             @RequestBody LicenseDto payload) {
         var license = LicenseTranslator.translate(payload, organizationId, licenseId);
-        var updatedLicense = licenseService.update(license, organizationId);
+        var updatedLicense = licenseService.update(license);
         return ResponseEntity.ok(toDto(organizationId, updatedLicense));
     }
 
@@ -73,12 +73,13 @@ class LicenseController {
 
     private LicenseDto toDto(UUID organizationId, License license) {
         var licenseController = methodOn(LicenseController.class);
+
+        UUID licenseId = license.getId();
         
         var dto = LicenseTranslator.translate(license);
-
-        dto.add(linkTo(licenseController.read(organizationId, license.getId())).withSelfRel(),
-                linkTo(licenseController.update(organizationId, license.getId(), dto)).withRel("update"),
-                linkTo(licenseController.delete(organizationId, license.getId())).withRel("delete"));
+        dto.add(linkTo(licenseController.read(organizationId, licenseId)).withSelfRel(),
+                linkTo(licenseController.update(organizationId, licenseId, dto)).withRel("update"),
+                linkTo(licenseController.delete(organizationId, licenseId)).withRel("delete"));
 
         return dto;
     }
