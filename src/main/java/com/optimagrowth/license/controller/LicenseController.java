@@ -29,6 +29,9 @@ class LicenseController {
 
     private final LicenseService licenseService;
 
+    private LicenseController licenseControllerMethodOn = methodOn(LicenseController.class);
+    private OrganizationFeignClient organizationFeignClientMethodOn = methodOn(OrganizationFeignClient.class);
+
     LicenseController(LicenseService licenseService) {
         this.licenseService = licenseService;
     }
@@ -73,17 +76,14 @@ class LicenseController {
     }
 
     private LicenseDto toDto(License license) {
-        var licenseController = methodOn(LicenseController.class);
-        var organizationFeignClient = methodOn(OrganizationFeignClient.class);
-
         UUID organizationId = license.getOrganization().getId();
         UUID licenseId = license.getId();
 
         var dto = LicenseTranslator.translate(license);
-        dto.add(linkTo(licenseController.read(organizationId, licenseId)).withSelfRel(),
-                linkTo(licenseController.update(organizationId, licenseId, dto)).withRel("update"),
-                linkTo(licenseController.delete(organizationId, licenseId)).withRel("delete"),
-                linkTo(organizationFeignClient.getOrganization(organizationId)).withRel("organization"));
+        dto.add(linkTo(licenseControllerMethodOn.read(organizationId, licenseId)).withSelfRel(),
+                linkTo(licenseControllerMethodOn.update(organizationId, licenseId, dto)).withRel("update"),
+                linkTo(licenseControllerMethodOn.delete(organizationId, licenseId)).withRel("delete"),
+                linkTo(organizationFeignClientMethodOn.getOrganization(organizationId)).withRel("organization"));
 
         return dto;
     }
