@@ -2,7 +2,7 @@ package com.optimagrowth.license.translator;
 
 import java.util.UUID;
 
-import com.optimagrowth.license.dto.LicenseDto;
+import com.optimagrowth.dto.LicenseDto;
 import com.optimagrowth.orm.model.License;
 import com.optimagrowth.orm.model.Organization;
 

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.optimagrowth.license.dto.LicenseDto;
+import com.optimagrowth.dto.LicenseDto;
 import com.optimagrowth.license.service.LicenseService;
 import com.optimagrowth.license.translator.LicenseTranslator;
 import com.optimagrowth.orm.model.License;
