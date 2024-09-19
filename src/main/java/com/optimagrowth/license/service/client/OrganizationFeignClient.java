@@ -6,7 +6,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import com.optimagrowth.orm.model.Organization;
+import com.optimagrowth.dto.OrganizationDto;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
@@ -16,5 +16,5 @@ import io.github.resilience4j.retry.annotation.Retry;
 @Retry(name = "organizationFeignClient")
 public interface OrganizationFeignClient {
     @GetMapping("/v1/organization/{organizationId}")
-    Organization getOrganization(@PathVariable("organizationId") UUID organizationId);
+    OrganizationDto getOrganization(@PathVariable("organizationId") UUID organizationId);
 }

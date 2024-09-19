@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.optimagrowth.dto.LicenseDto;
 import com.optimagrowth.license.service.LicenseService;
+import com.optimagrowth.license.service.client.OrganizationFeignClient;
 import com.optimagrowth.license.translator.LicenseTranslator;
 import com.optimagrowth.orm.model.License;
 
@@ -73,6 +74,7 @@ class LicenseController {
 
     private LicenseDto toDto(License license) {
         var licenseController = methodOn(LicenseController.class);
+        var organizationFeignClient = methodOn(OrganizationFeignClient.class);
 
         UUID organizationId = license.getOrganization().getId();
         UUID licenseId = license.getId();
@@ -80,7 +82,8 @@ class LicenseController {
         var dto = LicenseTranslator.translate(license);
         dto.add(linkTo(licenseController.read(organizationId, licenseId)).withSelfRel(),
                 linkTo(licenseController.update(organizationId, licenseId, dto)).withRel("update"),
-                linkTo(licenseController.delete(organizationId, licenseId)).withRel("delete"));
+                linkTo(licenseController.delete(organizationId, licenseId)).withRel("delete"),
+                linkTo(organizationFeignClient.getOrganization(organizationId)).withRel("organization"));
 
         return dto;
     }
