@@ -36,7 +36,7 @@ class LicenseController {
     ResponseEntity<LicenseDto> read(@PathVariable("organizationId") UUID organizationId,
             @PathVariable("licenseId") UUID licenseId) {
         var license = licenseService.read(licenseId, organizationId);
-        return ResponseEntity.ok(toDto(organizationId, license));
+        return ResponseEntity.ok(toDto(license));
     }
 
     @PostMapping
@@ -44,7 +44,7 @@ class LicenseController {
             @RequestBody LicenseDto payload) {
         var license = LicenseTranslator.translate(payload, organizationId);
         var createdLicense = licenseService.create(license);
-        return ResponseEntity.ok(toDto(organizationId, createdLicense));
+        return ResponseEntity.ok(toDto(createdLicense));
     }
 
     @PutMapping("/{licenseId}")
@@ -53,7 +53,7 @@ class LicenseController {
             @RequestBody LicenseDto payload) {
         var license = LicenseTranslator.translate(payload, organizationId, licenseId);
         var updatedLicense = licenseService.update(license);
-        return ResponseEntity.ok(toDto(organizationId, updatedLicense));
+        return ResponseEntity.ok(toDto(updatedLicense));
     }
 
     @DeleteMapping("/{licenseId}")
@@ -66,16 +66,17 @@ class LicenseController {
     @GetMapping
     ResponseEntity<CollectionModel<LicenseDto>> read(@PathVariable("organizationId") UUID organizationId) {
         var dtos = licenseService.read(organizationId).stream()
-                .map(license -> toDto(organizationId, license)).collect(Collectors.toList());
+                .map(license -> toDto(license)).collect(Collectors.toList());
 
         return ResponseEntity.ok(CollectionModel.of(dtos));
     }
 
-    private LicenseDto toDto(UUID organizationId, License license) {
+    private LicenseDto toDto(License license) {
         var licenseController = methodOn(LicenseController.class);
 
+        UUID organizationId = license.getOrganization().getId();
         UUID licenseId = license.getId();
-        
+
         var dto = LicenseTranslator.translate(license);
         dto.add(linkTo(licenseController.read(organizationId, licenseId)).withSelfRel(),
                 linkTo(licenseController.update(organizationId, licenseId, dto)).withRel("update"),
