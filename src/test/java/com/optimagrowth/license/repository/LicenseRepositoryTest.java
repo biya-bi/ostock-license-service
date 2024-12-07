@@ -43,7 +43,8 @@ class LicenseRepositoryTest {
 	private final License msOffice2016 = constructLicense(UUID.randomUUID(), "Microsoft Office 2016", "Software",
 			"This license is for the Kennedy Space Station", "Microsoft Office 2016 license for NASA", nasa);
 
-	private final License powerEdgeRackServer = constructLicense(UUID.randomUUID(), "PowerEdge XE9680 Rack Server", "Hardware",
+	private final License powerEdgeRackServer = constructLicense(UUID.randomUUID(), "PowerEdge XE9680 Rack Server",
+			"Hardware",
 			"Should be delivered before month end",
 			"Take on demanding artificial intelligence, machine learning and deep learning", unitedNations);
 
@@ -66,7 +67,7 @@ class LicenseRepositoryTest {
 
 	@Test
 	void find_ExactProductNameIsGiven_ReturnLicense() {
-		var criteria = new SearchCriteria(msOffice2016.getProductName(), null, null, null, null);
+		var criteria = new SearchCriteria(msOffice2016.getProductName(), null, null, null, null, null);
 
 		var page = licenseRepository.find(criteria, null);
 
@@ -78,7 +79,7 @@ class LicenseRepositoryTest {
 
 	@Test
 	void find_LowercaseProductNameIsGiven_ReturnLicense() {
-		var criteria = new SearchCriteria(msOffice2016.getProductName().toLowerCase(), null, null, null, null);
+		var criteria = new SearchCriteria(msOffice2016.getProductName().toLowerCase(), null, null, null, null, null);
 
 		var page = licenseRepository.find(criteria, null);
 
@@ -90,7 +91,7 @@ class LicenseRepositoryTest {
 
 	@Test
 	void find_FirstThreeProductNameCharactersAreGiven_ReturnLicense() {
-		var criteria = new SearchCriteria(msOffice2016.getProductName().substring(0, 3), null, null, null, null);
+		var criteria = new SearchCriteria(msOffice2016.getProductName().substring(0, 3), null, null, null, null, null);
 
 		var page = licenseRepository.find(criteria, null);
 
@@ -102,7 +103,7 @@ class LicenseRepositoryTest {
 
 	@Test
 	void find_NoCriterionIsGiven_ReturnLicenses() {
-		var criteria = new SearchCriteria(null, null, null, null, null);
+		var criteria = new SearchCriteria(null, null, null, null, null, null);
 
 		var page = licenseRepository.find(criteria, null);
 
@@ -111,7 +112,7 @@ class LicenseRepositoryTest {
 
 	@Test
 	void find_NonExistentNameIsGiven_NoReturnLicense() {
-		var criteria = new SearchCriteria(nonExistent, null, null, null, null);
+		var criteria = new SearchCriteria(nonExistent, null, null, null, null, null);
 
 		var page = licenseRepository.find(criteria, null);
 
@@ -120,7 +121,7 @@ class LicenseRepositoryTest {
 
 	@Test
 	void find_ExactLicenseTypeIsGiven_ReturnLicense() {
-		var criteria = new SearchCriteria(null, msOffice2016.getLicenseType(), null, null, null);
+		var criteria = new SearchCriteria(null, msOffice2016.getLicenseType(), null, null, null, null);
 
 		var page = licenseRepository.find(criteria, null);
 
@@ -132,7 +133,7 @@ class LicenseRepositoryTest {
 
 	@Test
 	void find_LowercaseLicenseTypeIsGiven_ReturnLicense() {
-		var criteria = new SearchCriteria(null, msOffice2016.getLicenseType().toLowerCase(), null, null, null);
+		var criteria = new SearchCriteria(null, msOffice2016.getLicenseType().toLowerCase(), null, null, null, null);
 
 		var page = licenseRepository.find(criteria, null);
 
@@ -144,7 +145,7 @@ class LicenseRepositoryTest {
 
 	@Test
 	void find_FirstThreeLicenseTypeCharactersAreGiven_ReturnLicense() {
-		var criteria = new SearchCriteria(null, msOffice2016.getLicenseType().substring(0, 3), null, null, null);
+		var criteria = new SearchCriteria(null, msOffice2016.getLicenseType().substring(0, 3), null, null, null, null);
 
 		var page = licenseRepository.find(criteria, null);
 
@@ -156,7 +157,7 @@ class LicenseRepositoryTest {
 
 	@Test
 	void find_NonExistentLicenseTypeIsGiven_NoReturnLicense() {
-		var criteria = new SearchCriteria(null, nonExistent, null, null, null);
+		var criteria = new SearchCriteria(null, nonExistent, null, null, null, null);
 
 		var page = licenseRepository.find(criteria, null);
 
@@ -165,7 +166,7 @@ class LicenseRepositoryTest {
 
 	@Test
 	void find_ExactDescriptionIsGiven_ReturnLicense() {
-		var criteria = new SearchCriteria(null, null, msOffice2016.getDescription(), null, null);
+		var criteria = new SearchCriteria(null, null, msOffice2016.getDescription(), null, null, null);
 
 		var page = licenseRepository.find(criteria, null);
 
@@ -177,7 +178,7 @@ class LicenseRepositoryTest {
 
 	@Test
 	void find_LowercaseDescriptionIsGiven_ReturnLicense() {
-		var criteria = new SearchCriteria(null, null, msOffice2016.getDescription().toLowerCase(), null, null);
+		var criteria = new SearchCriteria(null, null, msOffice2016.getDescription().toLowerCase(), null, null, null);
 
 		var page = licenseRepository.find(criteria, null);
 
@@ -189,7 +190,7 @@ class LicenseRepositoryTest {
 
 	@Test
 	void find_FirstThreeContactEmailCharactersAreGiven_ReturnLicense() {
-		var criteria = new SearchCriteria(null, null, msOffice2016.getDescription().substring(0, 3), null, null);
+		var criteria = new SearchCriteria(null, null, msOffice2016.getDescription().substring(0, 3), null, null, null);
 
 		var page = licenseRepository.find(criteria, null);
 
@@ -201,7 +202,7 @@ class LicenseRepositoryTest {
 
 	@Test
 	void find_NonExistentDescriptionIsGiven_NoReturnLicense() {
-		var criteria = new SearchCriteria(null, null, nonExistent, null, null);
+		var criteria = new SearchCriteria(null, null, nonExistent, null, null, null);
 
 		var page = licenseRepository.find(criteria, null);
 
@@ -210,7 +211,7 @@ class LicenseRepositoryTest {
 
 	@Test
 	void find_ExactCommentIsGiven_ReturnLicense() {
-		var criteria = new SearchCriteria(null, null, null, msOffice2016.getComment(), null);
+		var criteria = new SearchCriteria(null, null, null, msOffice2016.getComment(), null, null);
 
 		var page = licenseRepository.find(criteria, null);
 
@@ -222,7 +223,7 @@ class LicenseRepositoryTest {
 
 	@Test
 	void find_LowercaseCommentIsGiven_ReturnLicense() {
-		var criteria = new SearchCriteria(null, null, null, msOffice2016.getComment().toLowerCase(), null);
+		var criteria = new SearchCriteria(null, null, null, msOffice2016.getComment().toLowerCase(), null, null);
 
 		var page = licenseRepository.find(criteria, null);
 
@@ -234,7 +235,7 @@ class LicenseRepositoryTest {
 
 	@Test
 	void find_FirstThreeCommentCharactersAreGiven_ReturnLicense() {
-		var criteria = new SearchCriteria(null, null, null, msOffice2016.getComment().substring(0, 3), null);
+		var criteria = new SearchCriteria(null, null, null, msOffice2016.getComment().substring(0, 3), null, null);
 
 		var page = licenseRepository.find(criteria, null);
 
@@ -246,7 +247,7 @@ class LicenseRepositoryTest {
 
 	@Test
 	void find_NonExistentCommentIsGiven_NoReturnLicense() {
-		var criteria = new SearchCriteria(null, null, null, nonExistent, null);
+		var criteria = new SearchCriteria(null, null, null, nonExistent, null, null);
 
 		var page = licenseRepository.find(criteria, null);
 
@@ -255,7 +256,7 @@ class LicenseRepositoryTest {
 
 	@Test
 	void find_ProductNameExistsButLicenseTypeDoesNot_NoReturnLicense() {
-		var criteria = new SearchCriteria(msOffice2016.getProductName(), nonExistent, null, null, null);
+		var criteria = new SearchCriteria(msOffice2016.getProductName(), nonExistent, null, null, null, null);
 
 		var page = licenseRepository.find(criteria, null);
 
@@ -264,7 +265,7 @@ class LicenseRepositoryTest {
 
 	@Test
 	void find_PageNumberIs0AndPageSizeIs1_ReturnLicense() {
-		var criteria = new SearchCriteria(null, null, null, null, null);
+		var criteria = new SearchCriteria(null, null, null, null, null, null);
 
 		var page = licenseRepository.find(criteria, PageRequest.of(0, 1));
 
@@ -278,7 +279,7 @@ class LicenseRepositoryTest {
 
 	@Test
 	void find_PageNumberIs1AndPageSizeIs1_ReturnLicense() {
-		var criteria = new SearchCriteria(null, null, null, null, null);
+		var criteria = new SearchCriteria(null, null, null, null, null, null);
 
 		var page = licenseRepository.find(criteria, PageRequest.of(1, 1));
 
@@ -292,7 +293,7 @@ class LicenseRepositoryTest {
 
 	@Test
 	void find_OrganizationNameIsGiven_ReturnLicense() {
-		var criteria = new SearchCriteria(null, null, null, null, unitedNations.getName());
+		var criteria = new SearchCriteria(null, null, null, null, unitedNations.getName(), null);
 
 		var page = licenseRepository.find(criteria, null);
 
@@ -300,6 +301,28 @@ class LicenseRepositoryTest {
 		assertEquals(1, page.getTotalElements());
 		// Verify that the returned license is right one
 		assertTrue(exists(page.getContent(), powerEdgeRackServer.getId()));
+	}
+
+	@Test
+	void find_OrganizationIdIsGiven_ReturnLicense() {
+		var criteria = new SearchCriteria(null, null, null, null, null, unitedNations.getId());
+
+		var page = licenseRepository.find(criteria, null);
+
+		// Verify that the total number of licenses returned is 1
+		assertEquals(1, page.getTotalElements());
+		// Verify that the returned license is right one
+		assertTrue(exists(page.getContent(), powerEdgeRackServer.getId()));
+	}
+
+	@Test
+	void find_NonExistentOrganizationIdIsGiven_ReturnNoLicense() {
+		var criteria = new SearchCriteria(null, null, null, null, null, UUID.randomUUID());
+
+		var page = licenseRepository.find(criteria, null);
+
+		// Verify that the returned license is right one
+		assertTrue(page.isEmpty());
 	}
 
 	private License constructLicense(UUID id, String productName, String licenseType,

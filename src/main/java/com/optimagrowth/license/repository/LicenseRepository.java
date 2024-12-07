@@ -27,11 +27,13 @@ public interface LicenseRepository extends CrudRepository<License, UUID> {
 			+ "((:#{#criteria.licenseType} is null) or (upper(l.licenseType) like concat('%',upper(:#{#criteria.licenseType}),'%'))) and "
 			+ "((:#{#criteria.description} is null) or (upper(l.description) like concat('%',upper(:#{#criteria.description}),'%'))) and "
 			+ "((:#{#criteria.comment} is null) or (upper(l.comment) like concat('%',upper(:#{#criteria.comment}),'%'))) and "
-			+ "((:#{#criteria.organizationName} is null) or (upper(l.organization.name) like concat('%',upper(:#{#criteria.organizationName}),'%')))", countQuery = "select count(l) from License l where "
+			+ "((:#{#criteria.organizationName} is null) or (upper(l.organization.name) like concat('%',upper(:#{#criteria.organizationName}),'%'))) and "
+			+ "((:#{#criteria.organizationId} is null) or (l.organization.id = :#{#criteria.organizationId}))", countQuery = "select count(l) from License l where "
 					+ "((:#{#criteria.productName} is null) or (upper(l.productName) like concat('%',upper(:#{#criteria.productName}),'%'))) and "
 					+ "((:#{#criteria.licenseType} is null) or (upper(l.licenseType) like concat('%',upper(:#{#criteria.licenseType}),'%'))) and "
 					+ "((:#{#criteria.description} is null) or (upper(l.description) like concat('%',upper(:#{#criteria.description}),'%'))) and "
 					+ "((:#{#criteria.comment} is null) or (upper(l.comment) like concat('%',upper(:#{#criteria.comment}),'%'))) and "
-					+ "((:#{#criteria.organizationName} is null) or (upper(l.organization.name) like concat('%',upper(:#{#criteria.organizationName}),'%')))")
+					+ "((:#{#criteria.organizationName} is null) or (upper(l.organization.name) like concat('%',upper(:#{#criteria.organizationName}),'%'))) and "
+					+ "((:#{#criteria.organizationId} is null) or (l.organization.id = :#{#criteria.organizationId}))")
 	Page<License> find(@Param("criteria") SearchCriteria criteria, Pageable pageable);
 }
