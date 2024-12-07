@@ -4,7 +4,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
@@ -30,53 +29,52 @@ import com.optimagrowth.orm.model.License;
 @RequestMapping("/v1/license")
 class LicenseController {
 
-    private final LicenseService licenseService;
+	private final LicenseService licenseService;
 
-    private LicenseController licenseControllerMethodOn = methodOn(LicenseController.class);
-    private OrganizationFeignClient organizationFeignClientMethodOn = methodOn(OrganizationFeignClient.class);
+	private LicenseController licenseControllerMethodOn = methodOn(LicenseController.class);
+	private OrganizationFeignClient organizationFeignClientMethodOn = methodOn(OrganizationFeignClient.class);
 
-    LicenseController(LicenseService licenseService) {
-        this.licenseService = licenseService;
-    }
+	LicenseController(LicenseService licenseService) {
+		this.licenseService = licenseService;
+	}
 
-    @GetMapping("/{organizationId}/{licenseId}")
-    ResponseEntity<LicenseDto> read(@PathVariable("organizationId") UUID organizationId,
-            @PathVariable("licenseId") UUID licenseId) {
-        var license = licenseService.read(licenseId, organizationId);
-        return ResponseEntity.ok(toDto(license));
-    }
+	@GetMapping("/{organizationId}/{licenseId}")
+	ResponseEntity<LicenseDto> read(@PathVariable("organizationId") UUID organizationId,
+			@PathVariable("licenseId") UUID licenseId) {
+		var license = licenseService.read(licenseId, organizationId);
+		return ResponseEntity.ok(toDto(license));
+	}
 
-    @PostMapping("/{organizationId}")
-    ResponseEntity<LicenseDto> create(@PathVariable("organizationId") UUID organizationId,
-            @RequestBody LicenseDto payload) {
-        var license = LicenseTranslator.translate(payload, organizationId);
-        var createdLicense = licenseService.create(license);
-        return ResponseEntity.ok(toDto(createdLicense));
-    }
+	@PostMapping("/{organizationId}")
+	ResponseEntity<LicenseDto> create(@PathVariable("organizationId") UUID organizationId,
+			@RequestBody LicenseDto payload) {
+		var license = LicenseTranslator.translate(payload, organizationId);
+		var createdLicense = licenseService.create(license);
+		return ResponseEntity.ok(toDto(createdLicense));
+	}
 
-    @PutMapping("/{organizationId}/{licenseId}")
-    ResponseEntity<LicenseDto> update(@PathVariable("organizationId") UUID organizationId,
-            @PathVariable("licenseId") UUID licenseId,
-            @RequestBody LicenseDto payload) {
-        var license = LicenseTranslator.translate(payload, organizationId, licenseId);
-        var updatedLicense = licenseService.update(license);
-        return ResponseEntity.ok(toDto(updatedLicense));
-    }
+	@PutMapping("/{organizationId}/{licenseId}")
+	ResponseEntity<LicenseDto> update(@PathVariable("organizationId") UUID organizationId,
+			@PathVariable("licenseId") UUID licenseId,
+			@RequestBody LicenseDto payload) {
+		var license = LicenseTranslator.translate(payload, organizationId, licenseId);
+		var updatedLicense = licenseService.update(license);
+		return ResponseEntity.ok(toDto(updatedLicense));
+	}
 
-    @DeleteMapping("/{organizationId}/{licenseId}")
-    ResponseEntity<Void> delete(@PathVariable("organizationId") UUID organizationId,
-            @PathVariable("licenseId") UUID licenseId) {
-        licenseService.delete(licenseId, organizationId);
-        return ResponseEntity.ok(null);
-    }
+	@DeleteMapping("/{organizationId}/{licenseId}")
+	ResponseEntity<Void> delete(@PathVariable("organizationId") UUID organizationId,
+			@PathVariable("licenseId") UUID licenseId) {
+		licenseService.delete(licenseId, organizationId);
+		return ResponseEntity.ok(null);
+	}
 
-    @GetMapping("/{organizationId}")
-    ResponseEntity<CollectionModel<LicenseDto>> read(@PathVariable("organizationId") UUID organizationId) {
-        var dtos = licenseService.read(organizationId).stream()
-                .map(license -> toDto(license)).collect(Collectors.toList());
+	@GetMapping("/{organizationId}")
+	ResponseEntity<CollectionModel<LicenseDto>> read(@PathVariable("organizationId") UUID organizationId) {
+		var dtos = licenseService.read(organizationId).stream().map(this::toDto).toList();
 
-        return ResponseEntity.ok(CollectionModel.of(dtos));
-    }
+		return ResponseEntity.ok(CollectionModel.of(dtos));
+	}
 
 	@PostMapping("/search")
 	ResponseEntity<PageDto<LicenseDto>> read(@RequestBody SearchCriteria criteria,
@@ -92,18 +90,17 @@ class LicenseController {
 		return ResponseEntity.ok(pageDto);
 	}
 
+	private LicenseDto toDto(License license) {
+		var organizationId = license.getOrganization().getId();
+		var licenseId = license.getId();
 
-    private LicenseDto toDto(License license) {
-        var organizationId = license.getOrganization().getId();
-        var licenseId = license.getId();
+		var dto = LicenseTranslator.translate(license);
+		dto.add(linkTo(licenseControllerMethodOn.read(organizationId, licenseId)).withSelfRel(),
+				linkTo(licenseControllerMethodOn.update(organizationId, licenseId, dto)).withRel("update"),
+				linkTo(licenseControllerMethodOn.delete(organizationId, licenseId)).withRel("delete"),
+				linkTo(organizationFeignClientMethodOn.getOrganization(organizationId)).withRel("organization"));
 
-        var dto = LicenseTranslator.translate(license);
-        dto.add(linkTo(licenseControllerMethodOn.read(organizationId, licenseId)).withSelfRel(),
-                linkTo(licenseControllerMethodOn.update(organizationId, licenseId, dto)).withRel("update"),
-                linkTo(licenseControllerMethodOn.delete(organizationId, licenseId)).withRel("delete"),
-                linkTo(organizationFeignClientMethodOn.getOrganization(organizationId)).withRel("organization"));
-
-        return dto;
-    }
+		return dto;
+	}
 
 }
