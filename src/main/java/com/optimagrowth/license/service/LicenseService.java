@@ -3,6 +3,9 @@ package com.optimagrowth.license.service;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
+
+import com.optimagrowth.license.criteria.SearchCriteria;
 import com.optimagrowth.orm.model.License;
 
 public interface LicenseService {
@@ -15,4 +18,6 @@ public interface LicenseService {
     void delete(UUID licenseId, UUID organizationId);
 
     List<License> read(UUID organizationId);
+
+	Page<License> read(SearchCriteria criteria, Integer pageNumber, Integer pageSize);
 }

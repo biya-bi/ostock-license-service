@@ -15,16 +15,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.optimagrowth.dto.LicenseDto;
+import com.optimagrowth.dto.PageDto;
+import com.optimagrowth.license.criteria.SearchCriteria;
 import com.optimagrowth.license.service.LicenseService;
 import com.optimagrowth.license.service.client.OrganizationFeignClient;
 import com.optimagrowth.license.translator.LicenseTranslator;
 import com.optimagrowth.orm.model.License;
 
 @RestController
-@RequestMapping("/v1/license/{organizationId}")
+@RequestMapping("/v1/license")
 class LicenseController {
 
     private final LicenseService licenseService;
@@ -36,14 +39,14 @@ class LicenseController {
         this.licenseService = licenseService;
     }
 
-    @GetMapping("/{licenseId}")
+    @GetMapping("/{organizationId}/{licenseId}")
     ResponseEntity<LicenseDto> read(@PathVariable("organizationId") UUID organizationId,
             @PathVariable("licenseId") UUID licenseId) {
         var license = licenseService.read(licenseId, organizationId);
         return ResponseEntity.ok(toDto(license));
     }
 
-    @PostMapping
+    @PostMapping("/{organizationId}")
     ResponseEntity<LicenseDto> create(@PathVariable("organizationId") UUID organizationId,
             @RequestBody LicenseDto payload) {
         var license = LicenseTranslator.translate(payload, organizationId);
@@ -51,7 +54,7 @@ class LicenseController {
         return ResponseEntity.ok(toDto(createdLicense));
     }
 
-    @PutMapping("/{licenseId}")
+    @PutMapping("/{organizationId}/{licenseId}")
     ResponseEntity<LicenseDto> update(@PathVariable("organizationId") UUID organizationId,
             @PathVariable("licenseId") UUID licenseId,
             @RequestBody LicenseDto payload) {
@@ -60,20 +63,35 @@ class LicenseController {
         return ResponseEntity.ok(toDto(updatedLicense));
     }
 
-    @DeleteMapping("/{licenseId}")
+    @DeleteMapping("/{organizationId}/{licenseId}")
     ResponseEntity<Void> delete(@PathVariable("organizationId") UUID organizationId,
             @PathVariable("licenseId") UUID licenseId) {
         licenseService.delete(licenseId, organizationId);
         return ResponseEntity.ok(null);
     }
 
-    @GetMapping
+    @GetMapping("/{organizationId}")
     ResponseEntity<CollectionModel<LicenseDto>> read(@PathVariable("organizationId") UUID organizationId) {
         var dtos = licenseService.read(organizationId).stream()
                 .map(license -> toDto(license)).collect(Collectors.toList());
 
         return ResponseEntity.ok(CollectionModel.of(dtos));
     }
+
+	@PostMapping("/search")
+	ResponseEntity<PageDto<LicenseDto>> read(@RequestBody SearchCriteria criteria,
+			@RequestParam(value = "pageNumber", required = false) Integer pageNumber,
+			@RequestParam(value = "pageSize", required = false) Integer pageSize) {
+		var page = licenseService.read(criteria, pageNumber, pageSize);
+
+		var licenses = page.getContent().stream().map(this::toDto).toList();
+
+		var pageDto = new PageDto<>(licenses, page.getNumber(), page.getSize(), page.getTotalPages(),
+				page.getNumberOfElements(), page.getTotalElements());
+
+		return ResponseEntity.ok(pageDto);
+	}
+
 
     private LicenseDto toDto(License license) {
         var organizationId = license.getOrganization().getId();

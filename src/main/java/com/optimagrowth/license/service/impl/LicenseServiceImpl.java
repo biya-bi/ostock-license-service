@@ -4,12 +4,17 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.optimagrowth.license.criteria.SearchCriteria;
 import com.optimagrowth.license.exception.NotFoundException;
 import com.optimagrowth.license.repository.LicenseRepository;
 import com.optimagrowth.license.service.LicenseService;
 import com.optimagrowth.orm.model.License;
+import com.optimagrowth.orm.model.Organization;
 import com.optimagrowth.service.MessageService;
 
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
@@ -20,73 +25,90 @@ import lombok.extern.slf4j.Slf4j;
 @RateLimiter(name = "licenseService")
 class LicenseServiceImpl implements LicenseService {
 
-    private static final String LICENSE_CREATE_MESSAGE = "license.create.message";
-    private static final String LICENSE_UPDATE_MESSAGE = "license.update.message";
-    private static final String LICENSE_DELETE_MESSAGE = "license.delete.message";
-    private static final String LICENSE_CANNOT_BE_NULL = "license.cannot.be.null";
-    private static final String LICENSE_NOT_FOUND = "license.not.found";
+	private static final String LICENSE_CREATE_MESSAGE = "license.create.message";
+	private static final String LICENSE_UPDATE_MESSAGE = "license.update.message";
+	private static final String LICENSE_DELETE_MESSAGE = "license.delete.message";
+	private static final String LICENSE_CANNOT_BE_NULL = "license.cannot.be.null";
+	private static final String LICENSE_NOT_FOUND = "license.not.found";
 
-    private final LicenseRepository licenseRepository;
-    private final MessageService messageService;
+	private static final int DEFAULT_PAGE_SIZE = 20;
 
-    LicenseServiceImpl(LicenseRepository licenseRepository, MessageService messageService) {
-        this.licenseRepository = licenseRepository;
-        this.messageService = messageService;
-    }
+	private final LicenseRepository licenseRepository;
+	private final MessageService messageService;
 
-    @Override
-    public License read(UUID licenseId, UUID organizationId) {
-        var license = licenseRepository.findByOrganizationIdAndId(organizationId, licenseId);
+	LicenseServiceImpl(LicenseRepository licenseRepository, MessageService messageService) {
+		this.licenseRepository = licenseRepository;
+		this.messageService = messageService;
+	}
 
-        if (license == null) {
-            throw new NotFoundException(
-                    messageService.getMessage(LICENSE_NOT_FOUND, licenseId, organizationId));
-        }
+	@Override
+	public License read(UUID licenseId, UUID organizationId) {
+		var license = licenseRepository.findByOrganizationIdAndId(organizationId, licenseId);
 
-        return license;
-    }
+		if (license == null) {
+			throw new NotFoundException(
+					messageService.getMessage(LICENSE_NOT_FOUND, licenseId, organizationId));
+		}
 
-    @Override
-    public License create(License license) {
-        Objects.requireNonNull(license, messageService.getMessage(LICENSE_CANNOT_BE_NULL, license));
+		return license;
+	}
 
-        license.setId(UUID.randomUUID());
+	@Override
+	public License create(License license) {
+		Objects.requireNonNull(license, messageService.getMessage(LICENSE_CANNOT_BE_NULL, license));
 
-        var createdLicense = licenseRepository.save(license);
+		license.setId(UUID.randomUUID());
 
-        log.info(messageService.getMessage(LICENSE_CREATE_MESSAGE, license));
+		var createdLicense = licenseRepository.save(license);
 
-        return createdLicense;
-    }
+		log.info(messageService.getMessage(LICENSE_CREATE_MESSAGE, license));
 
-    @Override
-    public License update(License license) {
-        Objects.requireNonNull(license, messageService.getMessage(LICENSE_CANNOT_BE_NULL, license));
+		return createdLicense;
+	}
 
-        var updatedLicense = licenseRepository.save(license);
+	@Override
+	public License update(License license) {
+		Objects.requireNonNull(license, messageService.getMessage(LICENSE_CANNOT_BE_NULL, license));
 
-        log.info(messageService.getMessage(LICENSE_UPDATE_MESSAGE, license));
+		var updatedLicense = licenseRepository.save(license);
 
-        return updatedLicense;
-    }
+		log.info(messageService.getMessage(LICENSE_UPDATE_MESSAGE, license));
 
-    @Override
-    public void delete(UUID licenseId, UUID organizationId) {
-        var license = licenseRepository.findByOrganizationIdAndId(organizationId, licenseId);
+		return updatedLicense;
+	}
 
-        if (license == null) {
-            throw new NotFoundException(
-                    messageService.getMessage(LICENSE_NOT_FOUND, licenseId, organizationId));
-        }
+	@Override
+	public void delete(UUID licenseId, UUID organizationId) {
+		var license = licenseRepository.findByOrganizationIdAndId(organizationId, licenseId);
 
-        licenseRepository.delete(license);
+		if (license == null) {
+			throw new NotFoundException(
+					messageService.getMessage(LICENSE_NOT_FOUND, licenseId, organizationId));
+		}
 
-        log.info(messageService.getMessage(LICENSE_DELETE_MESSAGE, licenseId, organizationId));
-    }
+		licenseRepository.delete(license);
 
-    @Override
-    public List<License> read(UUID organizationId) {
-        return licenseRepository.findByOrganizationId(organizationId);
-    }
+		log.info(messageService.getMessage(LICENSE_DELETE_MESSAGE, licenseId, organizationId));
+	}
 
+	@Override
+	public List<License> read(UUID organizationId) {
+		return licenseRepository.findByOrganizationId(organizationId);
+	}
+
+	@Override
+	public Page<License> read(SearchCriteria criteria, Integer pageNumber, Integer pageSize) {
+		Pageable pageable = getPageable(pageNumber, pageSize);
+		return licenseRepository.find(criteria, pageable);
+	}
+
+	private Pageable getPageable(Integer pageNumber, Integer pageSize) {
+		if (pageNumber == null || pageNumber < 0) {
+			pageNumber = 0;
+		}
+		if (pageSize == null || pageSize < 0) {
+			pageSize = DEFAULT_PAGE_SIZE;
+		}
+		return PageRequest.of(pageNumber, pageSize);
+	}
 }
