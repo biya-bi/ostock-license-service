@@ -111,7 +111,7 @@ class LicenseRepositoryTest {
 	}
 
 	@Test
-	void find_NonExistentNameIsGiven_NoReturnLicense() {
+	void find_NonExistentNameIsGiven_ReturnNoLicense() {
 		var criteria = new SearchCriteria(nonExistent, null, null, null, null, null);
 
 		var page = licenseRepository.find(criteria, null);
@@ -156,7 +156,7 @@ class LicenseRepositoryTest {
 	}
 
 	@Test
-	void find_NonExistentLicenseTypeIsGiven_NoReturnLicense() {
+	void find_NonExistentLicenseTypeIsGiven_ReturnNoLicense() {
 		var criteria = new SearchCriteria(null, nonExistent, null, null, null, null);
 
 		var page = licenseRepository.find(criteria, null);
@@ -201,7 +201,7 @@ class LicenseRepositoryTest {
 	}
 
 	@Test
-	void find_NonExistentDescriptionIsGiven_NoReturnLicense() {
+	void find_NonExistentDescriptionIsGiven_ReturnNoLicense() {
 		var criteria = new SearchCriteria(null, null, nonExistent, null, null, null);
 
 		var page = licenseRepository.find(criteria, null);
@@ -246,7 +246,7 @@ class LicenseRepositoryTest {
 	}
 
 	@Test
-	void find_NonExistentCommentIsGiven_NoReturnLicense() {
+	void find_NonExistentCommentIsGiven_ReturnNoLicense() {
 		var criteria = new SearchCriteria(null, null, null, nonExistent, null, null);
 
 		var page = licenseRepository.find(criteria, null);
@@ -255,7 +255,7 @@ class LicenseRepositoryTest {
 	}
 
 	@Test
-	void find_ProductNameExistsButLicenseTypeDoesNot_NoReturnLicense() {
+	void find_ProductNameExistsButLicenseTypeDoesNot_ReturnNoLicense() {
 		var criteria = new SearchCriteria(msOffice2016.getProductName(), nonExistent, null, null, null, null);
 
 		var page = licenseRepository.find(criteria, null);
