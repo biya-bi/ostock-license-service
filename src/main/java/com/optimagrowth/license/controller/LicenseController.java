@@ -5,7 +5,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.util.UUID;
 
-import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -74,7 +73,6 @@ class LicenseController {
 			@RequestBody SearchCriteria criteria,
 			@RequestParam(value = "pageNumber", required = false) Integer pageNumber,
 			@RequestParam(value = "pageSize", required = false) Integer pageSize) {
-
 		// Construct a new criteria object containing the organization ID in the path
 		var searchCriteria = new SearchCriteria(criteria.productName(), criteria.licenseType(), criteria.description(),
 				criteria.comment(), criteria.organizationName(), organizationId);
