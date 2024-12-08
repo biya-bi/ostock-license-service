@@ -69,11 +69,17 @@ class LicenseController {
 		return ResponseEntity.ok(null);
 	}
 
-	@GetMapping("/{organizationId}")
-	ResponseEntity<CollectionModel<LicenseDto>> read(@PathVariable("organizationId") UUID organizationId) {
-		var dtos = licenseService.read(organizationId).stream().map(this::toDto).toList();
+	@PostMapping("/search/{organizationId}")
+	ResponseEntity<PageDto<LicenseDto>> read(@PathVariable("organizationId") UUID organizationId,
+			@RequestBody SearchCriteria criteria,
+			@RequestParam(value = "pageNumber", required = false) Integer pageNumber,
+			@RequestParam(value = "pageSize", required = false) Integer pageSize) {
 
-		return ResponseEntity.ok(CollectionModel.of(dtos));
+		// Construct a new criteria object containing the organization ID in the path
+		var searchCriteria = new SearchCriteria(criteria.productName(), criteria.licenseType(), criteria.description(),
+				criteria.comment(), criteria.organizationName(), organizationId);
+
+		return read(searchCriteria, pageNumber, pageSize);
 	}
 
 	@PostMapping("/search")
