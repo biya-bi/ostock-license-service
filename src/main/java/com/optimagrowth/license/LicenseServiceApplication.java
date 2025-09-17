@@ -16,12 +16,12 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 @EnableFeignClients
 @EnableMethodSecurity
 @EntityScan("com.optimagrowth.orm.model")
-public class LicensingServiceApplication {
+public class LicenseServiceApplication {
 
 	public static void main(String[] args) throws IOException {
 		readAndSet();
 		
-		SpringApplication.run(LicensingServiceApplication.class, args);
+		SpringApplication.run(LicenseServiceApplication.class, args);
 	}
 
 
