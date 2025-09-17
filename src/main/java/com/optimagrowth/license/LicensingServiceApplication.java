@@ -27,8 +27,7 @@ public class LicensingServiceApplication {
 
 	private static void readAndSet() throws IOException {
 		EnvFileReader.readAndSet(
-				Map.of("JWT_ISSUER_URI_FILE", "spring.security.oauth2.resourceserver.jwt.issuerUri",
-						"DATASOURCE_URL_FILE", "spring.datasource.url",
+				Map.of("DATASOURCE_URL_FILE", "spring.datasource.url",
 						"DATASOURCE_USERNAME_FILE", "spring.datasource.username",
 						"DATASOURCE_PASSWORD_FILE", "spring.datasource.password"));
 	}
