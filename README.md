@@ -33,7 +33,7 @@ export DATASOURCE_PASSWORD_FILE="$POSTGRES_SECRETS_DIR"/password
 The **license-service** requires a Postgres database. A quick way of launching such a database is by running a Docker container. Below is a sample of scripts that might be helpful for this purpose:
 ```
 POSTGRES_PORT=9005
-POSTGRES_DATA="$HOME"/Development/Projects/nguiland/.vscode/postgres/data
+POSTGRES_DATA="$HOME"/Development/Projects/nguiland/.vscode/ostock/postgres/data
 mkdir -p "$POSTGRES_DATA"
 docker run -d --name ostock-postgres \
   -p "$POSTGRES_PORT":5432 \
