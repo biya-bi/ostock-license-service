@@ -18,6 +18,7 @@
 		<java.version>17</java.version>
 		<spring-cloud.version>2023.0.1</spring-cloud.version>
 		<cross-cutting-concerns.version>0.0.1-SNAPSHOT</cross-cutting-concerns.version>
+		<web-oauth2.version>0.0.1-SNAPSHOT</web-oauth2.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -90,6 +91,11 @@
 			<groupId>org.nguiland</groupId>
 			<artifactId>io-utils</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.nguiland.security</groupId>
+			<artifactId>web-oauth2</artifactId>
+			<version>${web-oauth2.version}</version>
 		</dependency>
 
 		<dependency>
