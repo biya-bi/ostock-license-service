@@ -88,7 +88,7 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.nguiland</groupId>
+			<groupId>org.nguiland.io</groupId>
 			<artifactId>io-utils</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
