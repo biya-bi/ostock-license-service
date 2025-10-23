@@ -1,5 +1,6 @@
 package com.optimagrowth.license.exception;
 
+import org.nguiland.context.service.MessageService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -7,8 +8,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
-import com.optimagrowth.service.MessageService;
 
 import feign.FeignException;
 import io.github.resilience4j.ratelimiter.RequestNotPermitted;
