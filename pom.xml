@@ -4,9 +4,9 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.2.3</version>
+		<groupId>com.optimagrowth</groupId>
+		<artifactId>ms-parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.optimagrowth</groupId>
@@ -14,13 +14,6 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Licensing Service</name>
 	<description>Ostock Licensing Service</description>
-	<properties>
-		<java.version>17</java.version>
-		<spring-cloud.version>2023.0.1</spring-cloud.version>
-		<cross-cutting-concerns.version>0.0.1-SNAPSHOT</cross-cutting-concerns.version>
-		<web-oauth2.version>0.0.1-SNAPSHOT</web-oauth2.version>
-		<context.version>0.0.1-SNAPSHOT</context.version>
-	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -86,34 +79,28 @@
 		<dependency>
 			<groupId>com.optimagrowth</groupId>
 			<artifactId>cross-cutting-concerns</artifactId>
-			<version>${cross-cutting-concerns.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.nguiland.io</groupId>
 			<artifactId>io-utils</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.nguiland.security</groupId>
 			<artifactId>web-oauth2</artifactId>
-			<version>${web-oauth2.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.nguiland.context</groupId>
 			<artifactId>context</artifactId>
-			<version>${context.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.optimagrowth</groupId>
 			<artifactId>orm</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.optimagrowth</groupId>
 			<artifactId>dto</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
@@ -128,18 +115,6 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.springframework.cloud</groupId>
-				<artifactId>spring-cloud-dependencies</artifactId>
-				<version>${spring-cloud.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
 
 	<build>
 		<plugins>
