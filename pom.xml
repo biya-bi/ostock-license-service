@@ -12,8 +12,8 @@
 	<groupId>com.optimagrowth</groupId>
 	<artifactId>license-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Licensing Service</name>
-	<description>Ostock Licensing Service</description>
+	<name>License Service</name>
+	<description>Ostock License Service</description>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -77,11 +77,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.optimagrowth</groupId>
-			<artifactId>cross-cutting-concerns</artifactId>
-		</dependency>
-
-		<dependency>
 			<groupId>org.nguiland.io</groupId>
 			<artifactId>io-utils</artifactId>
 		</dependency>
@@ -94,6 +89,10 @@
 			<artifactId>context</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>com.optimagrowth</groupId>
+			<artifactId>cross-cutting-concerns</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>com.optimagrowth</groupId>
 			<artifactId>orm</artifactId>
