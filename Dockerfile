@@ -6,4 +6,4 @@ WORKDIR /opt/ostock
 
 COPY target/*.jar ./license-service.jar
 
-ENTRYPOINT java -jar ./license-service.jar
+ENTRYPOINT ["java", "-jar", "./license-service.jar"]
