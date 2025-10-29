@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.optimagrowth</groupId>
-		<artifactId>ms-parent</artifactId>
+		<artifactId>ostock-ms-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
@@ -78,15 +78,15 @@
 
 		<dependency>
 			<groupId>org.nguiland.io</groupId>
-			<artifactId>io-utils</artifactId>
+			<artifactId>nguiland-io-utils</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.nguiland.security</groupId>
-			<artifactId>web-oauth2</artifactId>
+			<artifactId>nguiland-web-oauth2</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.nguiland.context</groupId>
-			<artifactId>context</artifactId>
+			<artifactId>nguiland-context</artifactId>
 		</dependency>
 
 		<dependency>
