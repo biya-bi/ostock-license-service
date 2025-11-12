@@ -4,20 +4,19 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-import org.nguiland.context.service.MessageService;
+import org.nguiland.rest.service.MessageService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.optimagrowth.license.criteria.SearchCriteria;
-import com.optimagrowth.license.exception.NotFoundException;
 import com.optimagrowth.license.repository.LicenseRepository;
 import com.optimagrowth.license.service.LicenseService;
 import com.optimagrowth.orm.model.License;
-import com.optimagrowth.orm.model.Organization;
 
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
+import jakarta.ws.rs.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
