@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+import org.nguiland.rest.exception.NotFoundException;
 import org.nguiland.rest.service.MessageService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,7 +17,6 @@ import com.optimagrowth.license.service.LicenseService;
 import com.optimagrowth.orm.model.License;
 
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
-import jakarta.ws.rs.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
 @Service

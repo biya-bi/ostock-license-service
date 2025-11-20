@@ -79,11 +79,6 @@
     </dependency>
 
     <dependency>
-      <groupId>org.glassfish.jersey.core</groupId>
-      <artifactId>jersey-common</artifactId>
-    </dependency>
-
-    <dependency>
       <groupId>org.nguiland.io</groupId>
       <artifactId>nguiland-io-utils</artifactId>
     </dependency>
